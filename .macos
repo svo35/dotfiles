@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 # ~/.macos — https://mths.be/macos
-# Modified by Kent C. Dodds
 # Run without downloading:
-# curl https://raw.githubusercontent.com/kentcdodds/dotfiles/master/.macos | bash
+# curl https://raw.githubusercontent.com/svo35/dotfiles/master/.macos | bash
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
@@ -14,67 +13,6 @@ sudo -v
 
 # Keep-alive: update existing `sudo` time stamp until `.macos` has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-
-###############################################################################
-# Kent's Customizations                                                       #
-###############################################################################
-
-echo "Hello $(whoami)! Let's get you set up."
-
-echo "mkdir -p ${HOME}/code"
-mkdir -p "${HOME}/code"
-
-echo "installing homebrew"
-# install homebrew https://brew.sh
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-echo "brew installing stuff"
-# hub: a github-specific version of git
-# libdvdcss: makes handbreak capable of ripping DVDs
-# ripgrep: rg is faster than alternatives
-# imagemagick: eventually I will need this for something
-# ffmpeg: eventually I'll need this for something
-# tree: really handy for listing out directories in text
-# bat: A cat(1) clone with syntax highlighting and Git integration.
-# switchaudio-osx: allows me to switch the audio device via the command line
-brew install git hub libdvdcss ripgrep imagemagick watchman tree bat \
-switchaudio-osx
-
-echo "installing node (via n-install)"
-curl -L https://git.io/n-install | bash
-
-echo "node --version: $(node --version)"
-echo "npm --version: $(npm --version)"
-
-echo "installing a few global npm packages"
-npm install --global serve diff-so-fancy fkill-cli npm-quick-run \
-semantic-release-cli npm-check-updates
-
-echo "installing apps with brew cask"
-brew cask install alfred google-chrome firefox brave-browser bettertouchtool divvy \
-bartender google-drive-file-stream itsycal visual-studio-code 1password dash \
-screenflow marshallofsound-google-play-music-player skype workflowy \
-sublime-text vlc discord obs handbrake zoomus betterzip avibrazil-rdm sip \
-qlcolorcode qlmarkdown qlstephen quicklook-json webpquicklook \
-suspicious-package qlvideo spotify focus dropbox front qmoji slack
-
-echo "Generating an RSA token for GitHub"
-mkdir -p ~/.ssh
-touch ~/.ssh/config
-ssh-keygen -t rsa -b 4096 -C "me+github@kentcdodds.com"
-echo "Host *\n AddKeysToAgent yes\n UseKeychain yes\n IdentityFile ~/.ssh/id_rsa" | tee ~/.ssh/config
-eval "$(ssh-agent -s)"
-echo "run 'pbcopy < ~/.ssh/id_rsa.pub' and paste that into GitHub"
-
-echo "cloning dotfiles"
-git clone git@github.com:kentcdodds/dotfiles.git "${HOME}/dotfiles"
-ln -s "${HOME}/dotfiles/.zshrc" "${HOME}/.zshrc"
-ln -s "${HOME}/dotfiles/.gitignore_global" "${HOME}/.gitignore_global"
-ln -s "${HOME}/dotfiles/.my_bin" "${HOME}/.my_bin"
-ln -s "${HOME}/dotfiles/.vimrc" "${HOME}/.vimrc"
-ln -s "${HOME}/dotfiles/.vimrc-parts" "${HOME}/.vimrc-parts"
-
-echo "making system modifications:"
 
 # Make Chrome Two finger swipe for back and forward
 defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool TRUE
